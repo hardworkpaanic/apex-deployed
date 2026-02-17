@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-const STRAPI_URL = 'http://127.0.0.1:1337'
+const STRAPI_URL = 'https://apex-api-strapi.onrender.com'
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
