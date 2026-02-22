@@ -7,15 +7,16 @@ const nextConfig: NextConfig = {
 		unoptimized: true,
 		remotePatterns: [
 			{
-				protocol: 'http',
-				hostname: '*',
+				protocol: 'https',
+				hostname: 'apex-api-strapi.onrender.com'
 			},
 			{
-				protocol: 'https',
-				hostname: 'apex-api-strapi.onrender.com',
-			},
-		],
-	},
+				protocol: 'http',
+				hostname: '127.0.0.1',
+				port: '1337'
+			}
+		]
+	}
 }
 
 export default nextConfig

@@ -1,56 +1,89 @@
-import { cn } from "@/shared/lib/utils";
-import { ArrowUpRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { cn, getImageUrl } from '@/shared/lib/utils'
+import { ArticleData } from '@/shared/models/types/article'
+import { ArrowUpRight } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
 
-export function ArticleCard({
-  row,
-  className,
-}: {
-  row?: boolean;
-  className?: string;
-}) {
-  return (
-    <Link
-      href="/blog/13141424"
-      className={cn(
-        "w-full flex",
-        row ? "flex-row gap-5 md:w-full" : "flex-col w-full md:max-w-full"
-      )}
-    >
-      <Image
-        src="/blog.jpg"
-        alt="blog"
-        width={row ? 203 : 343}
-        height={row ? 178 : 299}
-        className={cn(
-          row
-            ? "bg-contain bg-center rounded-2xl w-[203px] h-[178px]"
-            : "bg-contain bg-center rounded-2xl w-full",
-          className
-        )}
-      />
+interface ArticleCardProps {
+	article: ArticleData
+	row?: boolean
+	className?: string
+}
 
-      <div className={cn(row ? "w-full" : undefined)}>
-        <div className="flex mt-3 justify-between">
-          <h4 className="w-full max-w-[80%] font-semibold text-[20px]">
-            Элегантные решения для вашего дома: премиум-строительство от
-            экспертов
-          </h4>
+export function ArticleCard({ article, row, className }: ArticleCardProps) {
+	// Функция для получения первого текстового блока из контента
+	const getPreviewText = () => {
+		if (!article.content || article.content.length === 0) {
+			return 'Описание отсутствует'
+		}
 
-          <ArrowUpRight />
-        </div>
+		// Ищем первый параграф с текстом
+		for (const block of article.content) {
+			if (
+				block.type === 'paragraph' &&
+				block.children &&
+				block.children.length > 0
+			) {
+				// Собираем текст из всех дочерних элементов
+				const text = block.children.map(child => child.text || '').join(' ')
 
-        {/* TODO: Сделать скрытие текста если он не помещается в 3 строки */}
+				if (text.trim()) {
+					return text
+				}
+			}
+		}
 
-        <p className="w-full max-w-[80%] text-[14px] mt-2 line-clamp-3">
-          Добро пожаловать на наш блог, где мы делимся последними тенденциями в
-          строительстве и дизайне. Узнайте о премиум-материалах, инновационных
-          технологиях и лучших практиках, которые помогут вам создать идеальное
-          пространство. Присоединяйтесь к нам, чтобы быть в курсе всех новинок и
-          получать советы от экспертов!
-        </p>
-      </div>
-    </Link>
-  );
+		return 'Описание отсутствует'
+	}
+
+	// Получаем URL изображения (заглушка, пока нет поля image)
+	// TODO: Заменить на реальное поле изображения из ArticleData
+
+	const imageUrl = article.image?.url
+		? getImageUrl(article.image.url)
+		: '/blog.jpg' // Временно
+
+	const previewText = getPreviewText()
+	const articleUrl = `/blog/${article.documentId}`
+
+	return (
+		<Link
+			href={articleUrl}
+			className={cn(
+				'w-full flex group',
+				row ? 'flex-row gap-5 md:w-full' : 'flex-col w-full md:max-w-full'
+			)}
+		>
+			<div
+				className={cn(
+					'relative overflow-hidden rounded-2xl',
+					row ? 'w-[203px] h-[178px] flex-shrink-0' : 'w-full aspect-[343/299]'
+				)}
+			>
+				<Image
+					src={imageUrl}
+					alt={article.title || 'Статья'}
+					fill
+					className={cn(
+						'object-cover transition-transform duration-300 group-hover:scale-105',
+						className
+					)}
+				/>
+			</div>
+
+			<div className={cn(row ? 'flex-1' : 'w-full')}>
+				<div className="flex mt-3 justify-between items-start gap-2">
+					<h4 className="font-semibold text-[20px] leading-tight line-clamp-2">
+						{article.title}
+					</h4>
+
+					<ArrowUpRight className="w-5 h-5 flex-shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+				</div>
+
+				<p className="text-[14px] mt-2 line-clamp-3 text-gray-600">
+					{previewText}
+				</p>
+			</div>
+		</Link>
+	)
 }

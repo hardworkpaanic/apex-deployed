@@ -1,8 +1,8 @@
-export function Title() {
+export function Title({ title }: { title: string }) {
 	return (
 		<section>
 			<h1 className="font-bold text-[30px] md:text-[54px] md:text-center mt-5">
-				Особняк в неоклассике, Рублёвка
+				{title}
 			</h1>
 		</section>
 	)
