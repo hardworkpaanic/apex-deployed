@@ -7,9 +7,11 @@ import { ApiResponse as HowWeWorkApi } from '@/shared/models/types/how-we-work'
 import { ApiResponse as installationApi } from '@/shared/models/types/installation'
 import { ApiResponse as MaterialApi } from '@/shared/models/types/material'
 import { ApiResponse as PriceApi } from '@/shared/models/types/price'
+import { ProjectResponse } from '@/shared/models/types/project'
+import { ProjectsResponse } from '@/shared/models/types/projects'
 
-const STRAPI_URL = 'https://apex-api-strapi.onrender.com/api'
-// const STRAPI_URL = 'http://localhost:1337/api'
+// const STRAPI_URL = 'https://apex-api-strapi.onrender.com/api'
+const STRAPI_URL = 'http://localhost:1337/api'
 
 export async function getAboutUs() {
 	const aboutUs = await fetch(`${STRAPI_URL}/aboutus?populate=all`, {
@@ -62,7 +64,6 @@ export async function getArticles() {
 }
 
 export async function getArticle(documentId: string) {
-	const url = `${STRAPI_URL}/articles/${documentId}`
 	const article = await fetch(
 		`${STRAPI_URL}/articles/${documentId}?populate=all`,
 		{
@@ -71,4 +72,25 @@ export async function getArticle(documentId: string) {
 	)
 
 	return await article.json()
+}
+
+export async function getProjects() {
+	const url = `${STRAPI_URL}/projects?populate=all`
+	console.log(url)
+	const projects = await fetch(url, {
+		method: 'GET',
+		cache: 'no-store'
+	})
+	return (await projects.json()) as ProjectsResponse
+}
+
+export async function getProject(documentId: string) {
+	const project = await fetch(
+		`${STRAPI_URL}/projects/${documentId}?populate=all`,
+		{
+			method: 'GET',
+			cache: 'no-store'
+		}
+	)
+	return (await project.json()) as ProjectResponse
 }

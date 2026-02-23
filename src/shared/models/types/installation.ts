@@ -255,5 +255,5 @@ export type {
 	WhyPoint,
 	WhySection,
 	YearItem,
-	YearSection,
+	YearSection
 }

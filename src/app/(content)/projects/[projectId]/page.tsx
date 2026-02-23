@@ -1,11 +1,6 @@
-import { getArticle } from '@/actions/lib/strapi'
+import { getProject } from '@/actions/lib/strapi'
 import { Content, Details, Title } from '@/page/content/widgets'
 import { Footer, WelcomeCard } from '@/shared/components'
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage
-} from '@/shared/components/ui/avatar'
 
 export default async function ProjectPage({
 	params
@@ -13,13 +8,14 @@ export default async function ProjectPage({
 	params: Promise<{ projectId: string }>
 }) {
 	const { projectId } = await params
-	const data = await getArticle(projectId)
+	const data = await getProject(projectId)
 	return (
 		<main>
 			<Title title={data.data.title} />
 			<Details
-				author={data.data.author}
-				date={data.data.date}
+				date={data.data.date || ''}
+				author="Александр Иванов"
+				image={data.data.image}
 			/>
 
 			{/* TODO: Сделать слайдер */}
@@ -27,35 +23,18 @@ export default async function ProjectPage({
 
 			<WelcomeCard
 				className="mt-5"
-				variant={'destructive'}
+				variant={
+					data.data.coment.type as
+						| 'destructive'
+						| 'successes'
+						| 'info'
+						| 'default'
+				}
 			>
-				Добро пожаловать на наш блог, где мы делимся последними тенденциями в
-				строительстве и дизайне. Узнайте о премиум-материалах, инновационных
-				технологиях и лучших практиках, которые помогут вам создать идеальное
-				пространство. Присоединяйтесь к нам, чтобы быть в курсе всех новинок и
-				получать советы от экспертов!
+				{data.data.coment.content}
 			</WelcomeCard>
 
-			<WelcomeCard
-				className="mt-5"
-				variant={'successes'}
-			>
-				Добро пожаловать на наш блог, где мы делимся последними тенденциями в
-				строительстве и дизайне. Узнайте о премиум-материалах, инновационных
-				технологиях и лучших практиках, которые помогут вам создать идеальное
-				пространство. Присоединяйтесь к нам, чтобы быть в курсе всех новинок и
-				получать советы от экспертов!
-			</WelcomeCard>
-
-			<WelcomeCard className="mt-5">
-				Добро пожаловать на наш блог, где мы делимся последними тенденциями в
-				строительстве и дизайне. Узнайте о премиум-материалах, инновационных
-				технологиях и лучших практиках, которые помогут вам создать идеальное
-				пространство. Присоединяйтесь к нам, чтобы быть в курсе всех новинок и
-				получать советы от экспертов!
-			</WelcomeCard>
-
-			<WelcomeCard
+			{/* <WelcomeCard
 				className="mt-5"
 				variant={'info'}
 			>
@@ -74,7 +53,7 @@ export default async function ProjectPage({
 						<p className="text-xs">Автор</p>
 					</div>
 				</div>
-			</WelcomeCard>
+			</WelcomeCard> */}
 
 			<Footer />
 		</main>
