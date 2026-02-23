@@ -8,8 +8,8 @@ import { ApiResponse as installationApi } from '@/shared/models/types/installati
 import { ApiResponse as MaterialApi } from '@/shared/models/types/material'
 import { ApiResponse as PriceApi } from '@/shared/models/types/price'
 
-// const STRAPI_URL = 'https://apex-api-strapi.onrender.com/api'
-const STRAPI_URL = 'http://localhost:1337/api'
+const STRAPI_URL = 'https://apex-api-strapi.onrender.com/api'
+// const STRAPI_URL = 'http://localhost:1337/api'
 
 export async function getAboutUs() {
 	const aboutUs = await fetch(`${STRAPI_URL}/aboutus?populate=all`, {
